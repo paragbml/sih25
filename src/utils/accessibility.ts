@@ -5,8 +5,8 @@ export interface SpeechOptions {
   pitch?: number;
   volume?: number;
 }
-// Tex
-t-to-Speech manager for multi-lanuage support
+
+// Text-to-Speech manager for multi-lanuage support
 export class TextToSpeechManager {
   private synthesis: SpeechSynthesis;
   private voices: SpeechSynthesisVoice[] = [];
@@ -15,7 +15,7 @@ export class TextToSpeechManager {
   constructor() {
     this.synthesis = window.speechSynthesis;
     this.loadVoices();
-    
+
     // Listen for voices loaded event
     if (speechSynthesis.onvoiceschanged !== undefined) {
       speechSynthesis.onvoiceschanged = () => this.loadVoices();
@@ -38,10 +38,10 @@ export class TextToSpeechManager {
     this.synthesis.cancel();
 
     const utterance = new SpeechSynthesisUtterance(text);
-    
+
     // Set language
     utterance.lang = options.lang || this.currentLang;
-    
+
     // Find appropriate voice
     const voice = this.findBestVoice(utterance.lang);
     if (voice) {
@@ -64,7 +64,7 @@ export class TextToSpeechManager {
   private findBestVoice(lang: string): SpeechSynthesisVoice | null {
     // Try to find exact language match
     let voice = this.voices.find(v => v.lang === lang);
-    
+
     // Fallback to language family (e.g., 'pa' for 'pa-IN')
     if (!voice) {
       const langFamily = lang.split('-')[0];
@@ -91,7 +91,7 @@ export class TextToSpeechManager {
 
   // Get available voices for a language
   public getVoicesForLanguage(lang: string): SpeechSynthesisVoice[] {
-    return this.voices.filter(voice => 
+    return this.voices.filter(voice =>
       voice.lang.startsWith(lang.split('-')[0])
     );
   }
@@ -118,7 +118,7 @@ export class AccessibilityManager {
   public increaseFontSize() {
     const sizes: Array<'normal' | 'large' | 'extra-large'> = ['normal', 'large', 'extra-large'];
     const currentIndex = sizes.indexOf(this.fontSize);
-    
+
     if (currentIndex < sizes.length - 1) {
       this.fontSize = sizes[currentIndex + 1];
       this.applyFontSize();
@@ -130,7 +130,7 @@ export class AccessibilityManager {
   public decreaseFontSize() {
     const sizes: Array<'normal' | 'large' | 'extra-large'> = ['normal', 'large', 'extra-large'];
     const currentIndex = sizes.indexOf(this.fontSize);
-    
+
     if (currentIndex > 0) {
       this.fontSize = sizes[currentIndex - 1];
       this.applyFontSize();
@@ -140,7 +140,7 @@ export class AccessibilityManager {
 
   private applyTheme() {
     const root = document.documentElement;
-    
+
     if (this.currentTheme === 'high-contrast') {
       root.classList.add('high-contrast');
       // Apply high contrast colors
@@ -165,17 +165,17 @@ export class AccessibilityManager {
       'large': '20px',
       'extra-large': '24px'
     };
-    
+
     root.style.setProperty('--base-font-size', fontSizeMap[this.fontSize]);
   }
 
   private applyAccessibilitySettings() {
     this.applyTheme();
     this.applyFontSize();
-    
+
     // Add focus indicators
     this.addFocusIndicators();
-    
+
     // Ensure minimum touch targets
     this.ensureMinimumTouchTargets();
   }
@@ -227,7 +227,7 @@ export class AccessibilityManager {
       theme: this.currentTheme,
       fontSize: this.fontSize
     };
-    
+
     localStorage.setItem('healthatm-accessibility', JSON.stringify(preferences));
   }
 
@@ -303,14 +303,14 @@ export class KeyboardNavigationManager {
 
   private navigateWithArrows(direction: string) {
     this.updateFocusableElements();
-    
+
     if (!this.elements || this.elements.length === 0) return;
 
     const currentElement = document.activeElement as HTMLElement;
     const currentIndex = Array.from(this.elements).indexOf(currentElement);
 
     let newIndex: number;
-    
+
     switch (direction) {
       case 'ArrowUp':
       case 'ArrowLeft':
@@ -394,7 +394,7 @@ export class ScreenReaderManager {
   // Announce message to screen readers
   public announce(message: string, priority: 'polite' | 'assertive' = 'polite') {
     this.liveRegion.setAttribute('aria-live', priority);
-    
+
     // Clear and set new message
     this.liveRegion.textContent = '';
     setTimeout(() => {
